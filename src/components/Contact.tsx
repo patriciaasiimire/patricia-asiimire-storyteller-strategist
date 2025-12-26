@@ -6,7 +6,6 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +15,6 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsSubmitting(false);
@@ -26,9 +24,8 @@ const Contact = () => {
       description: "I'll get back to you within 24 hours.",
     });
 
-    // Reset form after delay
     setTimeout(() => {
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', message: '' });
       setIsSubmitted(false);
     }, 3000);
   };
@@ -40,54 +37,53 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 bg-background">
+    <section id="contact" className="py-20 md:py-28 bg-cream-dark">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left Column - Info */}
-          <div>
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full mb-6">
-              <span className="font-body text-sm font-medium">Get in Touch</span>
-            </div>
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <span className="font-body text-xs font-semibold text-primary uppercase tracking-widest mb-4 block">
+              Contact
+            </span>
 
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl mb-6 leading-tight">
-              Let's create copy that{' '}
-              <span className="text-primary">connects</span>
+            <h2 className="font-display text-3xl md:text-4xl mb-4">
+              Let's create copy that connects
             </h2>
 
-            <p className="font-body text-lg text-muted-foreground mb-10 max-w-md">
+            <p className="font-body text-lg text-muted-foreground">
               Available for advertising, brand messaging, and product copy.
-              Whether you're a startup or an established brand, I'm here to help
-              tell your story.
             </p>
+          </div>
 
-            {/* Contact Methods */}
-            <div className="space-y-4 mb-10">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Contact Info */}
+            <div className="space-y-4">
               <a
                 href="mailto:asiimirepatricia26@gmail.com"
-                className="flex items-center gap-4 p-4 bg-secondary rounded-2xl hover:bg-muted transition-colors group"
+                className="flex items-center gap-4 p-4 bg-background rounded-xl hover:shadow-soft transition-shadow"
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="font-body text-sm text-muted-foreground">Email</p>
-                  <p className="font-body font-medium text-foreground">
+                  <p className="font-body font-medium text-foreground text-sm">
                     asiimirepatricia26@gmail.com
                   </p>
                 </div>
               </a>
 
               <a
-                href="tel:+256700000000"
-                className="flex items-center gap-4 p-4 bg-secondary rounded-2xl hover:bg-muted transition-colors group"
+                href="tel:+256758969973"
+                className="flex items-center gap-4 p-4 bg-background rounded-xl hover:shadow-soft transition-shadow"
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                   <Phone className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="font-body text-sm text-muted-foreground">Phone</p>
-                  <p className="font-body font-medium text-foreground">
-                    Available on request
+                  <p className="font-body font-medium text-foreground text-sm">
+                    +256 758 969 973
                   </p>
                 </div>
               </a>
@@ -96,132 +92,91 @@ const Contact = () => {
                 href="https://linkedin.com/in/patricia-asiimire"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-secondary rounded-2xl hover:bg-muted transition-colors group"
+                className="flex items-center gap-4 p-4 bg-background rounded-xl hover:shadow-soft transition-shadow"
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                   <Linkedin className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="font-body text-sm text-muted-foreground">LinkedIn</p>
-                  <p className="font-body font-medium text-foreground">
+                  <p className="font-body font-medium text-foreground text-sm">
                     Connect with me
                   </p>
                 </div>
               </a>
             </div>
-          </div>
 
-          {/* Right Column - Form */}
-          <div className="bg-cream-dark rounded-3xl p-8 md:p-10">
-            <h3 className="font-display text-2xl mb-6">Send a Message</h3>
-
-            {isSubmitted ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle className="w-8 h-8 text-primary" />
+            {/* Form */}
+            <div className="bg-background rounded-2xl p-6 md:p-8">
+              {isSubmitted ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <CheckCircle className="w-12 h-12 text-primary mb-4" />
+                  <h4 className="font-display text-xl mb-2">Sent!</h4>
+                  <p className="font-body text-muted-foreground text-sm">
+                    I'll reply within 24 hours.
+                  </p>
                 </div>
-                <h4 className="font-display text-xl mb-2">Message Sent!</h4>
-                <p className="font-body text-muted-foreground">
-                  I'll get back to you within 24 hours.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block font-body text-sm font-medium text-foreground mb-2"
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-cream-dark border-0 rounded-lg font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  <div>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-cream-dark border-0 rounded-lg font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      placeholder="Your email"
+                    />
+                  </div>
+
+                  <div>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={4}
+                      className="w-full px-4 py-3 bg-cream-dark border-0 rounded-lg font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                      placeholder="Tell me about your project..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-foreground text-background px-6 py-3 rounded-lg font-body font-semibold flex items-center justify-center gap-2 hover:bg-charcoal-light transition-colors disabled:opacity-70"
                   >
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block font-body text-sm font-medium text-foreground mb-2"
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                    placeholder="john@company.com"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block font-body text-sm font-medium text-foreground mb-2"
-                  >
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                    placeholder="Project Inquiry"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block font-body text-sm font-medium text-foreground mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-primary text-primary-foreground px-8 py-4 rounded-full font-body font-semibold flex items-center justify-center gap-2 hover:bg-gold-dark transition-colors shadow-gold disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      Send Message
-                      <Send size={18} />
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send size={16} />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>

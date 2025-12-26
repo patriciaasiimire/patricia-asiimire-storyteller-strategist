@@ -31,7 +31,7 @@ const Navbar = () => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         <a
           href="#home"
-          className="font-display text-xl md:text-2xl font-normal tracking-tight"
+          className="font-display text-xl tracking-tight"
         >
           Patricia<span className="text-primary">.</span>
         </a>
@@ -42,14 +42,14 @@ const Navbar = () => {
             <a
               key={link.href}
               href={link.href}
-              className="font-body text-sm font-medium text-foreground/80 hover:text-foreground gold-underline transition-colors"
+              className="font-body text-sm text-foreground/70 hover:text-foreground transition-colors"
             >
               {link.label}
             </a>
           ))}
           <a
             href="#contact"
-            className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full font-body text-sm font-semibold hover:bg-gold-dark transition-colors shadow-gold"
+            className="bg-foreground text-background px-5 py-2 rounded-full font-body text-sm font-medium hover:bg-charcoal-light transition-colors"
           >
             Hire Me
           </a>
@@ -67,14 +67,14 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border animate-fade-in">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border">
           <div className="container mx-auto px-6 py-6 flex flex-col gap-4">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-body text-base font-medium text-foreground/80 hover:text-foreground py-2 transition-colors"
+                className="font-body text-base text-foreground/80 hover:text-foreground py-2 transition-colors"
               >
                 {link.label}
               </a>
@@ -82,7 +82,7 @@ const Navbar = () => {
             <a
               href="#contact"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-body text-sm font-semibold text-center hover:bg-gold-dark transition-colors mt-2"
+              className="bg-foreground text-background px-6 py-3 rounded-full font-body text-sm font-medium text-center mt-2"
             >
               Hire Me
             </a>
