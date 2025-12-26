@@ -1,58 +1,86 @@
-import nexvoxScreenshot from '@/assets/nexvox-screenshot.png';
-import motofixScreenshot from '@/assets/motofix-screenshot.png';
-import sweetTrishScreenshot from '@/assets/sweettrish-screenshot.png';
-import bodaScreenshot from '@/assets/boda-screenshot.png';
+import img1 from '../assets/nexvox.jpg';
+import img2 from '../assets/jovi.jpg';
+import img3 from '../assets/jov.jpg';
+import img4 from '../assets/content1.png';
+import img5 from '../assets/nexvox.jpg';
+import img6 from '../assets/banner.jpg';
+import img7 from '../assets/patricia-headshot.jpg';
+import img8 from '../assets/sorry.jpg';
+import img9 from '../assets/teardrop.jpg';
 
-interface Project {
+type PostCard = {
   id: number;
   title: string;
-  subtitle: string;
-  screenshot: string;
-  challenge: string;
-  role: string;
-  results: string;
-}
+  subtitle?: string;
+  image: string;
+  excerpt?: string;
+  linkedinUrl?: string;
+  challenge?: string;
+  role?: string;
+  results?: string;
+};
 
-const projects: Project[] = [
+const posts: PostCard[] = [
   {
     id: 1,
-    title: 'NexVox AI',
-    subtitle: 'AI Agents for Businesses in Local Languages',
-    screenshot: nexvoxScreenshot,
-    challenge: 'Build awareness for AI voice agents in local languages',
-    role: 'Developed messaging, taglines, and content strategy',
-    results: 'Early engagement from Ugandan businesses',
+    title: 'NexVox AI — Building Awareness for Local-Language AI',
+    subtitle: 'Lost in Translation',
+    image: img1,
+    excerpt: 'Introducing voice AI agents that speak the languages of your customers.',
+    linkedinUrl: 'https://www.linkedin.com/posts/nexvox-ai_nexvoxai-ugandatech-voiceai-activity-7399479341543460866-LpBa?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    challenge: 'Introduce AI voice agents that speak like true Ugandans to a skeptical audience.',
+    role: 'Wrote playful, relatable social copy and tagline ("Lost in Translation") to highlight the language barrier problem in a fun, memorable way.',
+    results: 'Sparked conversations and engagement, making complex tech feel accessible and exciting.',
   },
   {
     id: 2,
-    title: 'MOTOFIX',
-    subtitle: 'On-Demand Roadside Mechanic Marketplace',
-    screenshot: motofixScreenshot,
-    challenge: 'Build trust in informal sector',
-    role: 'Wrote vision, user messaging, social copy, outreach',
-    results: 'Strong interest ahead of January 2026 pilot',
+    title: 'MOTOFIX — Driver Pain Research & Social Engagement',
+    subtitle: 'We Asked 10 Drivers What Pisses Them Off Most',
+    image: img2,
+    excerpt: 'Raw, headline-driven social copy capturing authentic driver voices.',
+    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_entrepreneurship-startups-mvp-activity-7371133658394537984-HRL_?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    challenge: 'Uncover real user frustrations to inform product and build community trust.',
+    role: 'Wrote raw, headline-driven social copy that captured authentic driver voices and positioned MOTOFIX as the solution.',
+    results: 'High engagement and comments, valuable insights for product messaging.',
   },
   {
     id: 3,
-    title: 'Sweet Trish',
-    subtitle: 'Confectionery Business',
-    screenshot: sweetTrishScreenshot,
-    challenge: 'Drive revenue for bootstrapped brand',
-    role: 'Created sales copy, marketing channels, descriptions',
-    results: 'Consistent monthly revenue from UGX 20,000 capital',
+    title: 'MOTOFIX — Street Research & Trust-Building Campaign',
+    subtitle: 'What would it take to trust a mechanic again?',
+    image: img3,
+    excerpt: 'Empathetic, question-driven social copy to spark honest conversations.',
+    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_ugandatech-motofix-nomoregettingstranded-activity-7349459269454385152-4UGy?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    challenge: 'Address deep mistrust in informal mechanics through on-ground research.',
+    role: 'Wrote empathetic, question-driven social copy to spark honest conversations and humanize the problem.',
+    results: 'Strong community interaction, real feedback that shaped product vision.',
   },
   {
     id: 4,
-    title: 'Spec Ad Copy',
-    subtitle: 'Local Boda Service Rewrite',
-    screenshot: bodaScreenshot,
-    challenge: 'Make boda service feel trusted and urgent',
-    role: 'Rewrote for emotional connection',
-    results: 'Spec example of local advertising style',
+    title: 'MOTOFIX — Team Vision & Product Thinking',
+    subtitle: 'What if car breakdowns were predictable—and preventable?',
+    image: img4,
+    excerpt: 'Thoughtful, aspirational caption showcasing team brainstorming.',
+    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_motofix-automotivecare-mobilityinuganda-activity-7351211691453440002-uHyP?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    challenge: 'Share startup process and position MOTOFIX as innovative solution.',
+    role: 'Wrote thoughtful, aspirational caption to showcase team brainstorming and forward-thinking approach.',
+    results: 'Humanized the brand, built follower connection and anticipation.',
+  },
+  {
+    id: 5,
+    title: "MOTOFIX — On-Ground Activation & Community Gratitude",
+    subtitle: 'A Day to Remember',
+    image: img6,
+    excerpt: 'Reflective, grateful copy that turned promotion into storytelling.',
+    linkedinUrl: 'https://www.linkedin.com/posts/patricia-asiimire-38b936236_motofixuganda-bodaboda-kampalahustle-ugcPost-7391944599365226496-ay1D?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    challenge: 'Capture energy of street promotion and thank community.',
+    role: 'Wrote reflective, grateful copy that turned promotion into storytelling.',
+    results: 'High engagement, items distributed, reinforced "Your Car\'s Best Friend" brand.',
   },
 ];
 
 const Portfolio = () => {
+  const allImages = [img1, img2, img3, img4, img5, img6, img7, img8];
+  const imagesPerPost = Math.ceil(allImages.length / posts.length);
   return (
     <section id="portfolio" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-6">
@@ -71,68 +99,67 @@ const Portfolio = () => {
           </p>
         </div>
 
-        {/* Projects */}
-        <div className="space-y-24">
-          {projects.map((project, index) => (
-            <div
-              key={project.id}
-              className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${
-                index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-              }`}
-            >
-              {/* Screenshot - Always First on Mobile */}
-              <div className={`${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-primary/10 rounded-2xl transform rotate-2 group-hover:rotate-1 transition-transform" />
-                  <img
-                    src={project.screenshot}
-                    alt={`${project.title} - Copy samples`}
-                    className="relative w-full rounded-2xl shadow-elevated border border-border"
-                  />
+        {/* Posts grid - card layout (LinkedIn-style posts) */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((p) => {
+            const start = (p.id - 1) * imagesPerPost;
+            const thumbs = allImages.slice(start, start + imagesPerPost);
+            return (
+              <article key={p.id} className="group bg-card rounded-2xl overflow-hidden shadow-sm">
+                <div className="block">
+                  <div className="w-full h-56 md:h-48 lg:h-40 overflow-hidden bg-muted-foreground/5">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-display text-lg mb-1">{p.title}</h3>
+                    {p.subtitle && <p className="text-sm text-muted-foreground mb-2">{p.subtitle}</p>}
+                    {p.excerpt && <p className="text-sm text-muted-foreground mb-3">{p.excerpt}</p>}
+
+                    {/* Short bullets: Challenge / Role / Results */}
+                    <ul className="text-sm text-muted-foreground space-y-2 mb-3">
+                      {p.challenge && (
+                        <li>
+                          <strong className="text-foreground">Challenge:</strong> {p.challenge}
+                        </li>
+                      )}
+                      {p.role && (
+                        <li>
+                          <strong className="text-foreground">Role:</strong> {p.role}
+                        </li>
+                      )}
+                      {p.results && (
+                        <li>
+                          <strong className="text-foreground">Results:</strong> {p.results}
+                        </li>
+                      )}
+                    </ul>
+
+                    {/* Thumbnail strip (uses all assets distributed across posts) */}
+                    {thumbs.length > 0 && (
+                      <div className="flex items-center gap-2 mb-3">
+                        {thumbs.map((t, i) => (
+                          <img key={i} src={t} alt={`thumb-${i}`} className="w-20 h-12 object-cover rounded-md border" />
+                        ))}
+                      </div>
+                    )}
+
+                    <a
+                      href={p.linkedinUrl || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-1 text-primary font-semibold"
+                    >
+                      View full LinkedIn post →
+                    </a>
+                  </div>
                 </div>
-              </div>
-
-              {/* Content */}
-              <div className={`${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                <span className="font-body text-xs font-semibold text-primary uppercase tracking-widest mb-2 block">
-                  Project {project.id}
-                </span>
-
-                <h3 className="font-display text-2xl md:text-3xl mb-2">
-                  {project.title}
-                </h3>
-
-                <p className="font-body text-muted-foreground mb-6">
-                  {project.subtitle}
-                </p>
-
-                {/* Bullets */}
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                    <div>
-                      <span className="font-body font-semibold text-foreground">Challenge:</span>{' '}
-                      <span className="font-body text-muted-foreground">{project.challenge}</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                    <div>
-                      <span className="font-body font-semibold text-foreground">Role:</span>{' '}
-                      <span className="font-body text-muted-foreground">{project.role}</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                    <div>
-                      <span className="font-body font-semibold text-foreground">Results:</span>{' '}
-                      <span className="font-body text-muted-foreground">{project.results}</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

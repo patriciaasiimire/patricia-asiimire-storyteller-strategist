@@ -13,7 +13,7 @@ const Index = () => {
         <title>Patricia Asiimire — Copywriter & Product Storyteller | Uganda</title>
         <meta
           name="description"
-          content="Patricia Asiimire is a Ugandan copywriter and product storyteller specializing in persuasive, local-impact copy for startups and brands. Founder of MOTOFIX and Sweet Trish."
+          content="Patricia Asiimire is a Ugandan copywriter and product storyteller specializing in persuasive, local-impact copy for startups and brands. Founder of MOTOFIX."
         />
         <meta
           name="keywords"

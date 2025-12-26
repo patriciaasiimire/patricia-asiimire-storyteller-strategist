@@ -14,20 +14,54 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    try {
+      const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT || '';
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!endpoint) {
+        // Fallback: open user's email client with mailto so messages still reach your inbox.
+        const to = 'asiimirepatricia26@gmail.com';
+        const subject = encodeURIComponent(`Website contact from ${formData.name || 'Visitor'}`);
+        const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
+        const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    toast({
-      title: "Message sent!",
-      description: "I'll get back to you within 24 hours.",
-    });
+        // Open mail client and show toast; we still reset form state for UX.
+        window.location.href = mailto;
+        setIsSubmitted(true);
+        toast({ title: 'Opening mail client', description: 'Your email app will open so you can send the message.' });
 
-    setTimeout(() => {
-      setFormData({ name: '', email: '', message: '' });
-      setIsSubmitted(false);
-    }, 3000);
+        setTimeout(() => {
+          setFormData({ name: '', email: '', message: '' });
+          setIsSubmitted(false);
+        }, 3000);
+
+        setIsSubmitting(false);
+        return;
+      }
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Failed to send message');
+      }
+
+      setIsSubmitted(true);
+      toast({ title: 'Message sent!', description: "I'll get back to you within 24 hours." });
+
+      setTimeout(() => {
+        setFormData({ name: '', email: '', message: '' });
+        setIsSubmitted(false);
+      }, 3000);
+    } catch (err: any) {
+      console.error('Contact submit error', err);
+      toast({ title: 'Send failed', description: err?.message || 'Could not send message.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (

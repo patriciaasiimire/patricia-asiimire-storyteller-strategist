@@ -28,13 +28,26 @@ const Hero = () => {
               Persuasive copy that connects with Ugandan audiences and drives results.
             </p>
 
-            <div className="border-l-2 border-primary pl-6 mb-10">
+            <div className="border-l-2 border-primary pl-6 mb-6">
               <p className="font-body text-foreground/90 leading-relaxed">
-                Founder of <strong>MOTOFIX</strong> (roadside marketplace) and{' '}
-                <strong>Sweet Trish</strong> (confectionery business). Messaging lead for{' '}
-                <strong>NexVox AI</strong> (local-language AI agents). I write human, 
-                impactful copy rooted in informal sector realities.
+                Founder of 2 companies. I work on product and brand copy that connects
+                with informal-economy audiences.
               </p>
+            </div>
+
+            <div className="flex gap-4 mb-8">
+              <div className="bg-background/60 px-4 py-2 rounded-lg text-center">
+                <div className="font-display text-xl">2</div>
+                <div className="text-sm text-muted-foreground">Projects</div>
+              </div>
+              <div className="bg-background/60 px-4 py-2 rounded-lg text-center">
+                <div className="font-display text-xl">2</div>
+                <div className="text-sm text-muted-foreground">Companies</div>
+              </div>
+              <div className="bg-background/60 px-4 py-2 rounded-lg text-center">
+                <div className="font-display text-xl">2</div>
+                <div className="text-sm text-muted-foreground">Years’ experience</div>
+              </div>
             </div>
 
             <a

@@ -30,27 +30,7 @@ const About = () => {
             </p>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-border">
-            <div>
-              <p className="font-display text-3xl text-foreground">2</p>
-              <p className="font-body text-sm text-muted-foreground mt-1">
-                Startups Founded
-              </p>
-            </div>
-            <div>
-              <p className="font-display text-3xl text-foreground">10+</p>
-              <p className="font-body text-sm text-muted-foreground mt-1">
-                Copy Projects
-              </p>
-            </div>
-            <div>
-              <p className="font-display text-3xl text-foreground">3+</p>
-              <p className="font-body text-sm text-muted-foreground mt-1">
-                Years Experience
-              </p>
-            </div>
-          </div>
+          {/* Quick Stats removed per request */}
         </div>
       </div>
     </section>
