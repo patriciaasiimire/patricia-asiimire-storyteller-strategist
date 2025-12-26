@@ -95,7 +95,7 @@ const Portfolio = () => {
           </h2>
 
           <p className="font-body text-lg text-muted-foreground">
-            Real work for Ugandan startups and brands. Big screenshots, short bullets.
+            Real work for Ugandan startups and brands.
           </p>
         </div>
 
