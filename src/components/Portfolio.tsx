@@ -1,167 +1,265 @@
+import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { usePortfolioPosts, useDeletePost, PortfolioPost } from '@/hooks/usePortfolioPosts';
+import AdminLogin from './AdminLogin';
+import PostEditor from './PostEditor';
+import { Button } from '@/components/ui/button';
+import { Plus, Edit2, Trash2, LogIn, LogOut, Loader2 } from 'lucide-react';
+
+// Fallback static posts for when database is empty
 import img1 from '../assets/nexvox.jpg';
 import img2 from '../assets/jovi.jpg';
 import img3 from '../assets/jov.jpg';
 import img4 from '../assets/content1.png';
-import img5 from '../assets/nexvox.jpg';
 import img6 from '../assets/banner.jpg';
-import img7 from '../assets/patricia-headshot.jpg';
-import img8 from '../assets/sorry.jpg';
-import img9 from '../assets/teardrop.jpg';
 
-type PostCard = {
-  id: number;
-  title: string;
-  subtitle?: string;
-  image: string;
-  excerpt?: string;
-  linkedinUrl?: string;
-  challenge?: string;
-  role?: string;
-  results?: string;
-};
-
-const posts: PostCard[] = [
+const staticPosts = [
   {
-    id: 1,
+    id: '1',
     title: 'NexVox AI — Building Awareness for Local-Language AI',
-    subtitle: 'Lost in Translation',
-    image: img1,
-    excerpt: 'Introducing voice AI agents that speak the languages of your customers.',
-    linkedinUrl: 'https://www.linkedin.com/posts/nexvox-ai_nexvoxai-ugandatech-voiceai-activity-7399479341543460866-LpBa?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    caption: 'Introducing voice AI agents that speak the languages of your customers.',
+    project_type: 'NexVox AI',
+    image_url: img1,
     challenge: 'Introduce AI voice agents that speak like true Ugandans to a skeptical audience.',
-    role: 'Wrote playful, relatable social copy and tagline ("Lost in Translation") to highlight the language barrier problem in a fun, memorable way.',
-    results: 'Sparked conversations and engagement, making complex tech feel accessible and exciting.',
+    role: 'Wrote playful, relatable social copy and tagline to highlight the language barrier problem.',
+    results: 'Sparked conversations and engagement, making complex tech feel accessible.',
   },
   {
-    id: 2,
+    id: '2',
     title: 'MOTOFIX — Driver Pain Research & Social Engagement',
-    subtitle: 'We Asked 10 Drivers What Pisses Them Off Most',
-    image: img2,
-    excerpt: 'Raw, headline-driven social copy capturing authentic driver voices.',
-    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_entrepreneurship-startups-mvp-activity-7371133658394537984-HRL_?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    caption: 'Raw, headline-driven social copy capturing authentic driver voices.',
+    project_type: 'MOTOFIX',
+    image_url: img2,
     challenge: 'Uncover real user frustrations to inform product and build community trust.',
-    role: 'Wrote raw, headline-driven social copy that captured authentic driver voices and positioned MOTOFIX as the solution.',
+    role: 'Wrote raw, headline-driven social copy that captured authentic driver voices.',
     results: 'High engagement and comments, valuable insights for product messaging.',
   },
   {
-    id: 3,
+    id: '3',
     title: 'MOTOFIX — Street Research & Trust-Building Campaign',
-    subtitle: 'What would it take to trust a mechanic again?',
-    image: img3,
-    excerpt: 'Empathetic, question-driven social copy to spark honest conversations.',
-    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_ugandatech-motofix-nomoregettingstranded-activity-7349459269454385152-4UGy?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    caption: 'Empathetic, question-driven social copy to spark honest conversations.',
+    project_type: 'MOTOFIX',
+    image_url: img3,
     challenge: 'Address deep mistrust in informal mechanics through on-ground research.',
-    role: 'Wrote empathetic, question-driven social copy to spark honest conversations and humanize the problem.',
+    role: 'Wrote empathetic, question-driven social copy to humanize the problem.',
     results: 'Strong community interaction, real feedback that shaped product vision.',
   },
   {
-    id: 4,
+    id: '4',
     title: 'MOTOFIX — Team Vision & Product Thinking',
-    subtitle: 'What if car breakdowns were predictable—and preventable?',
-    image: img4,
-    excerpt: 'Thoughtful, aspirational caption showcasing team brainstorming.',
-    linkedinUrl: 'https://www.linkedin.com/posts/motofix-uganda-2a7a17361_motofix-automotivecare-mobilityinuganda-activity-7351211691453440002-uHyP?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    caption: 'Thoughtful, aspirational caption showcasing team brainstorming.',
+    project_type: 'MOTOFIX',
+    image_url: img4,
     challenge: 'Share startup process and position MOTOFIX as innovative solution.',
-    role: 'Wrote thoughtful, aspirational caption to showcase team brainstorming and forward-thinking approach.',
+    role: 'Wrote thoughtful, aspirational caption to showcase team brainstorming.',
     results: 'Humanized the brand, built follower connection and anticipation.',
   },
   {
-    id: 5,
+    id: '5',
     title: "MOTOFIX — On-Ground Activation & Community Gratitude",
-    subtitle: 'A Day to Remember',
-    image: img6,
-    excerpt: 'Reflective, grateful copy that turned promotion into storytelling.',
-    linkedinUrl: 'https://www.linkedin.com/posts/patricia-asiimire-38b936236_motofixuganda-bodaboda-kampalahustle-ugcPost-7391944599365226496-ay1D?utm_source=share&utm_medium=member_desktop&rcm=ACoAADre6ZsBX3Id2l8mIZ0OiOyiARvtx2vXcaE',
+    caption: 'Reflective, grateful copy that turned promotion into storytelling.',
+    project_type: 'MOTOFIX',
+    image_url: img6,
     challenge: 'Capture energy of street promotion and thank community.',
     role: 'Wrote reflective, grateful copy that turned promotion into storytelling.',
-    results: 'High engagement, items distributed, reinforced "Your Car\'s Best Friend" brand.',
+    results: 'High engagement, reinforced "Your Car\'s Best Friend" brand.',
   },
 ];
 
 const Portfolio = () => {
-  const allImages = [img1, img2, img3, img4, img5, img6, img7, img8];
-  const imagesPerPost = Math.ceil(allImages.length / posts.length);
+  const { user, isAdmin, signOut, loading: authLoading } = useAuth();
+  const { data: dbPosts, isLoading: postsLoading } = usePortfolioPosts();
+  const deletePost = useDeletePost();
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [editingPost, setEditingPost] = useState<PortfolioPost | undefined>();
+
+  // Use database posts if available, otherwise show static fallback
+  const posts = dbPosts && dbPosts.length > 0 ? dbPosts : staticPosts;
+
+  const handleEdit = (post: PortfolioPost) => {
+    setEditingPost(post);
+    setShowEditor(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      await deletePost.mutateAsync(id);
+    }
+  };
+
+  const handleNewPost = () => {
+    setEditingPost(undefined);
+    setShowEditor(true);
+  };
+
   return (
     <section id="portfolio" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-6">
         {/* Header */}
-        <div className="max-w-2xl mb-16">
-          <span className="font-body text-xs font-semibold text-primary uppercase tracking-widest mb-4 block">
-            Portfolio
-          </span>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+          <div className="max-w-2xl">
+            <span className="font-body text-xs font-semibold text-primary uppercase tracking-widest mb-4 block">
+              Portfolio
+            </span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl mb-4">
+              Copy that connects
+            </h2>
+            <p className="font-body text-lg text-muted-foreground">
+              Real work for Ugandan startups and brands.
+            </p>
+          </div>
 
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl mb-4">
-            Copy that connects
-          </h2>
-
-          <p className="font-body text-lg text-muted-foreground">
-            Real work for Ugandan startups and brands.
-          </p>
+          {/* Admin Controls */}
+          <div className="flex items-center gap-3">
+            {!authLoading && (
+              <>
+                {isAdmin ? (
+                  <>
+                    <Button onClick={handleNewPost} size="sm" className="gap-2">
+                      <Plus className="w-4 h-4" />
+                      Add Post
+                    </Button>
+                    <Button
+                      onClick={signOut}
+                      variant="ghost"
+                      size="sm"
+                      className="gap-2 text-muted-foreground"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    onClick={() => setShowLogin(true)}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 text-muted-foreground hover:text-primary"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Admin
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Posts grid - card layout (LinkedIn-style posts) */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((p) => {
-            const start = (p.id - 1) * imagesPerPost;
-            const thumbs = allImages.slice(start, start + imagesPerPost);
-            return (
-              <article key={p.id} className="group bg-card rounded-2xl overflow-hidden shadow-sm">
-                <div className="block">
-                  <div className="w-full h-56 md:h-48 lg:h-40 overflow-hidden bg-muted-foreground/5">
+        {/* Loading State */}
+        {postsLoading && (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        )}
+
+        {/* Posts Grid - Social Media Style */}
+        {!postsLoading && (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <article
+                key={post.id}
+                className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 relative"
+              >
+                {/* Admin overlay */}
+                {isAdmin && (
+                  <div className="absolute top-3 right-3 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => handleEdit(post as PortfolioPost)}
+                      className="p-2 bg-white/90 rounded-full shadow hover:bg-primary hover:text-white transition-colors"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="p-2 bg-white/90 rounded-full shadow hover:bg-red-500 hover:text-white transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Image - Big and prominent */}
+                {post.image_url && (
+                  <div className="w-full aspect-[4/3] overflow-hidden bg-muted">
                     <img
-                      src={p.image}
-                      alt={p.title}
+                      src={post.image_url}
+                      alt={post.title}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-display text-lg mb-1">{p.title}</h3>
-                    {p.subtitle && <p className="text-sm text-muted-foreground mb-2">{p.subtitle}</p>}
-                    {p.excerpt && <p className="text-sm text-muted-foreground mb-3">{p.excerpt}</p>}
+                )}
 
-                    {/* Short bullets: Challenge / Role / Results */}
-                    <ul className="text-sm text-muted-foreground space-y-2 mb-3">
-                      {p.challenge && (
-                        <li>
-                          <strong className="text-foreground">Challenge:</strong> {p.challenge}
-                        </li>
-                      )}
-                      {p.role && (
-                        <li>
-                          <strong className="text-foreground">Role:</strong> {p.role}
-                        </li>
-                      )}
-                      {p.results && (
-                        <li>
-                          <strong className="text-foreground">Results:</strong> {p.results}
-                        </li>
-                      )}
-                    </ul>
+                {/* Content */}
+                <div className="p-5">
+                  {/* Project Type Badge */}
+                  {post.project_type && (
+                    <span className="inline-block text-xs font-semibold text-primary uppercase tracking-wide mb-2">
+                      {post.project_type}
+                    </span>
+                  )}
 
-                    {/* Thumbnail strip (uses all assets distributed across posts) */}
-                    {thumbs.length > 0 && (
-                      <div className="flex items-center gap-2 mb-3">
-                        {thumbs.map((t, i) => (
-                          <img key={i} src={t} alt={`thumb-${i}`} className="w-20 h-12 object-cover rounded-md border" />
-                        ))}
-                      </div>
+                  <h3 className="font-display text-lg mb-2 leading-tight">
+                    {post.title}
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {post.caption}
+                  </p>
+
+                  {/* Short bullets */}
+                  <ul className="text-sm text-muted-foreground space-y-2">
+                    {post.challenge && (
+                      <li>
+                        <strong className="text-foreground">Challenge:</strong>{' '}
+                        {post.challenge}
+                      </li>
                     )}
-
-                    <a
-                      href={p.linkedinUrl || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-1 text-primary font-semibold"
-                    >
-                      View full LinkedIn post →
-                    </a>
-                  </div>
+                    {post.role && (
+                      <li>
+                        <strong className="text-foreground">Role:</strong>{' '}
+                        {post.role}
+                      </li>
+                    )}
+                    {post.results && (
+                      <li>
+                        <strong className="text-foreground">Results:</strong>{' '}
+                        {post.results}
+                      </li>
+                    )}
+                  </ul>
                 </div>
               </article>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty State for Admin */}
+        {isAdmin && dbPosts && dbPosts.length === 0 && !postsLoading && (
+          <div className="text-center py-16 border-2 border-dashed border-muted-foreground/20 rounded-2xl mt-8">
+            <p className="text-muted-foreground mb-4">
+              No posts yet. Start building your portfolio!
+            </p>
+            <Button onClick={handleNewPost} className="gap-2">
+              <Plus className="w-4 h-4" />
+              Create First Post
+            </Button>
+          </div>
+        )}
       </div>
+
+      {/* Modals */}
+      {showLogin && <AdminLogin onClose={() => setShowLogin(false)} />}
+      {showEditor && (
+        <PostEditor
+          post={editingPost}
+          onClose={() => {
+            setShowEditor(false);
+            setEditingPost(undefined);
+          }}
+        />
+      )}
     </section>
   );
 };
