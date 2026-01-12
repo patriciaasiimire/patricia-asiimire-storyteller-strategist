@@ -74,9 +74,18 @@ const Portfolio = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<PortfolioPost | undefined>();
+  const [activeFilter, setActiveFilter] = useState<string>('All');
 
   // Use database posts if available, otherwise show static fallback
   const posts = dbPosts && dbPosts.length > 0 ? dbPosts : staticPosts;
+
+  // Get unique project types for filter tabs
+  const projectTypes = ['All', ...Array.from(new Set(posts.map(p => p.project_type).filter(Boolean)))];
+
+  // Filter posts based on active filter
+  const filteredPosts = activeFilter === 'All' 
+    ? posts 
+    : posts.filter(p => p.project_type === activeFilter);
 
   const handleEdit = (post: PortfolioPost) => {
     setEditingPost(post);
@@ -147,6 +156,25 @@ const Portfolio = () => {
           </div>
         </div>
 
+        {/* Filter Tabs */}
+        {!postsLoading && posts.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-10">
+            {projectTypes.map((type) => (
+              <button
+                key={type}
+                onClick={() => setActiveFilter(type as string)}
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                  activeFilter === type
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Loading State */}
         {postsLoading && (
           <div className="flex items-center justify-center py-20">
@@ -157,7 +185,7 @@ const Portfolio = () => {
         {/* Posts Grid - Social Media Style */}
         {!postsLoading && (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
+            {filteredPosts.map((post) => (
               <article
                 key={post.id}
                 className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 relative"
