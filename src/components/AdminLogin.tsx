@@ -1,95 +1,144 @@
 import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { LogIn, X } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { X, Lock, Eye, EyeOff } from 'lucide-react';
 
 interface AdminLoginProps {
   onClose: () => void;
 }
 
-const AdminLogin = ({ onClose }: AdminLoginProps) => {
-  const { signIn } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+const ADMIN_EMAIL = 'asiimirepatricia26@gmail.com';
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const AdminLogin = ({ onClose }: AdminLoginProps) => {
+  const [password, setPassword] = useState('');
+  const [isSettingUp, setIsSettingUp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { signIn, signUp } = useAuth();
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
+
+    try {
+      const { error } = await signIn(ADMIN_EMAIL, password);
+      if (error) {
+        // If user doesn't exist, prompt to set up password
+        if (error.message.includes('Invalid login credentials')) {
+          setIsSettingUp(true);
+          setError('No account found. Please set your admin password below.');
+        } else {
+          setError(error.message);
+        }
+      } else {
+        onClose();
+      }
+    } catch (err) {
+      setError('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSetup = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError('');
     
-    const { error } = await signIn(email, password);
-    
-    if (error) {
-      setError(error.message);
-    } else {
-      onClose();
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
     }
-    setLoading(false);
+    
+    setLoading(true);
+
+    try {
+      const { error } = await signUp(ADMIN_EMAIL, password);
+      if (error) {
+        setError(error.message);
+      } else {
+        // Auto sign in after signup
+        const { error: signInError } = await signIn(ADMIN_EMAIL, password);
+        if (!signInError) {
+          onClose();
+        }
+      }
+    } catch (err) {
+      setError('Setup failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fadeUp">
+    <div className="fixed inset-0 bg-charcoal/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-cream rounded-2xl p-8 max-w-md w-full relative border border-charcoal/10 shadow-elegant">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-4 right-4 text-charcoal/50 hover:text-charcoal transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X size={24} />
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <LogIn className="w-6 h-6 text-primary" />
+          <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="text-gold" size={24} />
           </div>
-          <h2 className="font-display text-2xl">Admin Login</h2>
-          <p className="text-muted-foreground text-sm mt-1">
-            Sign in to manage your portfolio
+          <h2 className="text-2xl font-display font-bold text-charcoal">
+            {isSettingUp ? 'Set Admin Password' : 'Admin Access'}
+          </h2>
+          <p className="text-charcoal/60 mt-2 text-sm">
+            {isSettingUp 
+              ? 'Choose a password you\'ll remember' 
+              : 'Enter your password to manage posts'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
+        <form onSubmit={isSettingUp ? handleSetup : handleLogin} className="space-y-4">
+          <div className="relative">
             <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              className="bg-white border-charcoal/20 focus:border-gold pr-10"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-charcoal"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 p-3 rounded-lg">
+            <p className={`text-sm ${isSettingUp && error.includes('set your') ? 'text-gold' : 'text-red-500'}`}>
               {error}
             </p>
           )}
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gold hover:bg-gold/90 text-charcoal font-semibold"
+          >
+            {loading ? 'Please wait...' : (isSettingUp ? 'Set Password & Login' : 'Login')}
           </Button>
-        </form>
 
-        <p className="text-xs text-muted-foreground text-center mt-4">
-          Only the admin can add or edit portfolio posts.
-        </p>
+          {!isSettingUp && (
+            <button
+              type="button"
+              onClick={() => setIsSettingUp(true)}
+              className="w-full text-sm text-charcoal/50 hover:text-gold transition-colors"
+            >
+              First time? Set up password
+            </button>
+          )}
+        </form>
       </div>
     </div>
   );
