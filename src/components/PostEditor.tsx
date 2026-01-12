@@ -4,20 +4,26 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { X, Upload, Image as ImageIcon, Loader2, Plus } from 'lucide-react';
 import { useCreatePost, useUpdatePost, uploadImage, PortfolioPost } from '@/hooks/usePortfolioPosts';
+import { usePortfolioPosts } from '@/hooks/usePortfolioPosts';
 
 interface PostEditorProps {
   post?: PortfolioPost;
   onClose: () => void;
 }
 
-const PROJECT_TYPES = ['NexVox AI', 'MOTOFIX', 'Sweet Trish', 'Spec Work', 'Other'];
+const DEFAULT_TYPES = ['NexVox AI', 'MOTOFIX', 'Sweet Trish', 'Spec Work'];
 
 const PostEditor = ({ post, onClose }: PostEditorProps) => {
   const createPost = useCreatePost();
   const updatePost = useUpdatePost();
+  const { data: existingPosts } = usePortfolioPosts();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Get unique project types from existing posts + defaults
+  const existingTypes = existingPosts?.map(p => p.project_type).filter(Boolean) || [];
+  const allProjectTypes = Array.from(new Set([...DEFAULT_TYPES, ...existingTypes]));
 
   const [formData, setFormData] = useState({
     title: post?.title || '',
@@ -33,6 +39,8 @@ const PostEditor = ({ post, onClose }: PostEditorProps) => {
 
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(post?.image_url || '');
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -147,20 +155,73 @@ const PostEditor = ({ post, onClose }: PostEditorProps) => {
 
           {/* Project Type */}
           <div>
-            <Label htmlFor="project_type">Project Type</Label>
-            <select
-              id="project_type"
-              value={formData.project_type}
-              onChange={(e) => setFormData((prev) => ({ ...prev, project_type: e.target.value }))}
-              className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              <option value="">Select project type</option>
-              {PROJECT_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            <Label htmlFor="project_type">Project Type / Category</Label>
+            {!showNewCategory ? (
+              <div className="flex gap-2">
+                <select
+                  id="project_type"
+                  value={formData.project_type}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, project_type: e.target.value }))}
+                  className="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="">Select category</option>
+                  {allProjectTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowNewCategory(true)}
+                  className="shrink-0"
+                  title="Add new category"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="Enter new category name"
+                  className="flex-1"
+                  autoFocus
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    if (newCategory.trim()) {
+                      setFormData((prev) => ({ ...prev, project_type: newCategory.trim() }));
+                      setShowNewCategory(false);
+                      setNewCategory('');
+                    }
+                  }}
+                >
+                  Add
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setShowNewCategory(false);
+                    setNewCategory('');
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+            {formData.project_type && showNewCategory === false && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Selected: <span className="text-primary font-medium">{formData.project_type}</span>
+              </p>
+            )}
           </div>
 
           {/* Challenge / Role / Results */}
